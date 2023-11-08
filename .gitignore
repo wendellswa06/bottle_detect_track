@@ -1,0 +1,13 @@
+.vscode
+__pycache__
+image_object_detection_results
+result vids
+results - custom display
+results - default display
+results - Object Counting
+test imgs
+test vids
+venv
+video_object_detection_results
+YOLOv8_models
+Basler_config
