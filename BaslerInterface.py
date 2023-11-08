@@ -100,7 +100,7 @@ if __name__ == "__main__":
     camera.Open()
     # camera.GainAuto.SetValue('Off')  # Optional steps to adjust parameters
     # camera.Gain.SetValue(10.0)       # Optional steps to adjust parameters
-    pylon.FeaturePersistence.Load('10_31.pfs', camera.GetNodeMap(), True)
+    pylon.FeaturePersistence.Load('Basler_config/10_31.pfs', camera.GetNodeMap(), True)
     camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)
 
     converter = pylon.ImageFormatConverter()
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
     #-----------------------------------------------
     # yolo_name = "yolov8x.pt"
-    yolo_name = "best.pt"
+    yolo_name = "YOLOv8_models/best.pt"
     detector = YOLOv8_ObjectDetector(yolo_name, conf=0.25, iou=0.45, classes=[39])
     tracker = sort.Sort(max_age=30, min_hits=10, iou_threshold=0.4)
     # prev = time.time()
