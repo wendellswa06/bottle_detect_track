@@ -9,6 +9,11 @@ from yolo_detect_and_count import YOLOv8_ObjectDetector, YOLOv8_ObjectCounter
 def bottle_counter(camera):
     totalCount = []
     prev = time.time()
+
+    # variables for recording
+    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+    out = cv2.VideoWriter(f'Recordings/video_{prev}.avi', fourcc, 20.0, (1920, 1080))
+
     while camera.IsGrabbing():
         detections = np.empty((0, 5))
         current = time.time()
@@ -22,8 +27,13 @@ def bottle_counter(camera):
             image = converter.Convert(grabResult)
             img = image.GetArray()
             img = cv2.resize(img, (1920, 1080))
+
             conv_img = img[:, 700:1250]
             frame = img.copy()
+            # Record video--------------
+            out.write(frame)
+            #---------------------------
+
             frame_width = 1080
             frm_height = 540
             frame = cv2.resize(frame, (frame_width, frm_height))
@@ -94,24 +104,29 @@ def bottle_counter(camera):
 
     
 if __name__ == "__main__":
-    camera = pylon.InstantCamera(pylon.TlFactory.GetInstance().CreateFirstDevice())
 
+    camera = pylon.InstantCamera(pylon.TlFactory.GetInstance().CreateFirstDevice())
     # Open camera and set some camera settings
     camera.Open()
     # camera.GainAuto.SetValue('Off')  # Optional steps to adjust parameters
     # camera.Gain.SetValue(10.0)       # Optional steps to adjust parameters
-    pylon.FeaturePersistence.Load('Basler_config/10_31.pfs', camera.GetNodeMap(), True)
+    pylon.FeaturePersistence.Load('Basler_config/11_8.pfs', camera.GetNodeMap(), True)
     camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)
 
     converter = pylon.ImageFormatConverter()
+
 
     # converting to opencv bgr format
     converter.OutputPixelFormat = pylon.PixelType_BGR8packed
     converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
     #-----------------------------------------------
+    #------------------------Recorder-------------------
+    
     # yolo_name = "yolov8x.pt"
-    yolo_name = "YOLOv8_models/best.pt"
-    detector = YOLOv8_ObjectDetector(yolo_name, conf=0.25, iou=0.45, classes=[39])
+    # yolo_name = "YOLOv8_models/yolov8l.pt"
+    yolo_name = "YOLOv8_models/best_x.pt"
+    # detector = YOLOv8_ObjectDetector(yolo_name, conf=0.25, iou=0.45, classes=[39])
+    detector = YOLOv8_ObjectDetector(yolo_name, conf=0.55, iou=0.45)
     tracker = sort.Sort(max_age=30, min_hits=10, iou_threshold=0.4)
     # prev = time.time()
     totalCount = []
