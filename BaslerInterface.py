@@ -19,7 +19,7 @@ def bottle_counter(camera):
         current = time.time()
         interval = current - prev
         prev = current
-        print(f"-------------capturing interval = {interval}")
+        # print(f"-------------capturing interval = {interval}")
         grabResult = camera.RetrieveResult(500, pylon.TimeoutHandling_ThrowException)
 
         if grabResult.GrabSucceeded():
@@ -73,7 +73,7 @@ def bottle_counter(camera):
                 print('***********************************************')
             fps = 1 / (time.time() - beg)
             infer_time = time.time() - beg
-            print(f"----------inference time = {infer_time}-----------")
+            # print(f"----------inference time = {infer_time}-----------")
 
             conv_img = cv2.rotate(conv_img, cv2.ROTATE_90_COUNTERCLOCKWISE)
             cv_width = conv_img.shape[1]
@@ -124,9 +124,9 @@ if __name__ == "__main__":
     
     # yolo_name = "yolov8x.pt"
     # yolo_name = "YOLOv8_models/yolov8l.pt"
-    yolo_name = "YOLOv8_models/best_x.pt"
-    # detector = YOLOv8_ObjectDetector(yolo_name, conf=0.25, iou=0.45, classes=[39])
-    detector = YOLOv8_ObjectDetector(yolo_name, conf=0.55, iou=0.45)
+    yolo_name = "YOLOv8_models/best_x_9.pt"
+    detector = YOLOv8_ObjectDetector(yolo_name, conf=0.25, iou=0.45, classes=[39])
+    # detector = YOLOv8_ObjectDetector(yolo_name, conf=0.55, iou=0.45)
     tracker = sort.Sort(max_age=30, min_hits=10, iou_threshold=0.4)
     # prev = time.time()
     totalCount = []
